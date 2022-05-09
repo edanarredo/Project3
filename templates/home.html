@@ -9,6 +9,23 @@
 <h2>Home Page</h2>
 <p>Welcome back, {{ username }}!</p>
 
+<script>
+var clicks = 0;
+function onClick(ev) {
+    ev
+    console.log("onclick function being called");
+    fetch("/home", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: {
+          "genre": genre
+      },
+    });
+  }</script>
+
     <!-- Define a bootstrap grid -->
     <div class="container-fluid mt-3">
       <div class="row">
@@ -24,6 +41,7 @@
     <!-- Javascript to create a clickable button of each category -->
     <script type="text/javascript">
     var bt, bt_text, op;
+    var genre = "none";
 
     <!-- Get the list of categories into javascript string and remove unwanted characters -->
     var str =  "{{ categories | replace("'","") | replace("[","") | replace("]","") }}";
@@ -43,7 +61,11 @@
         b1.className = "btn btn-success";
         bt_text = document.createTextNode(cat_list[i]);
         b1.appendChild(bt_text);
-        b1.addEventListener('click', function(){displaymovies(this.innerText);}, false);
+        b1.addEventListener('click', function(){
+            displaymovies(this.innerText);
+            genre = this.innerText;
+            console.log(genre);
+        }, false);
         col.appendChild(b1);
         row.appendChild(col);
         op = document.getElementById("options");
@@ -70,7 +92,9 @@
                     col = document.createElement("div");
                     col.className = "col";
                     p = document.createElement('p');
+                    p.setAttribute("id", "movie");
                     p.className = "btn btn-warning";
+                    p.addEventListener("click", onClick);
 
                     <!-- Get the title of a movie -->
                     p_text = document.createTextNode(mov_list[i][j][0]);

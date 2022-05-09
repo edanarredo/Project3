@@ -154,6 +154,7 @@ def register():
                            (first, last, email, username, hash,))
             conn.commit()
             msg = 'You have successfully registered!'
+            cursor.execute('CREATE TABLE movie_counts(user TEXT, genre INTEGER, count INTEGER)');
             return render_template('index.html')
 
     elif request.method == "POST":
@@ -164,8 +165,17 @@ def register():
     return render_template('register.html', msg=msg)
 
 
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
+    if request.method == "POST":
+        count = 0
+        user = session['username']
+        genre = ""
+        cursor.execute('INSERT INTO movie_counts(user, genre, count) VALUES (?, ?, ?)',
+                           (first, last, email, username, hash,))
+        print(request)
+
+
     # Check if user is loggedin
     if 'loggedin' in session:
         # Initialize a list to store 100 movies of each category
