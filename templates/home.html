@@ -8,6 +8,9 @@
 {% block content %}
 <h2>Home Page</h2>
 <p>Welcome back, {{ username }}!</p>
+    <p>Movies viewed: <span id="display">0</span></p>
+    <p>Categories viewed: <span id = "display2"></span></p>
+
 
     <!-- Define a bootstrap grid -->
     <div class="container-fluid mt-3">
@@ -24,6 +27,7 @@
     <!-- Javascript to create a clickable button of each category -->
     <script type="text/javascript">
     var bt, bt_text, op;
+    var count = 0;
 
     <!-- Get the list of categories into javascript string and remove unwanted characters -->
     var str =  "{{ categories | replace("'","") | replace("[","") | replace("]","") }}";
@@ -53,6 +57,7 @@
     <!-- Function to display movies of a category when a user click on the category button -->
     function displaymovies(btext)
     {
+
         var mov_list = JSON.parse({{ movies | tojson }});
         var num_cat = {{ num_categories }};
         op = document.getElementById("mlist");
@@ -63,18 +68,27 @@
             if (btext == mov_list[i][0])
             {
                 <!-- Use DOM to create HTML elements <P> and <ul><li> to display movie information -->
+
                 for(let j=1; j < 100; j++)
                 {
+
                     row = document.createElement("div");
                     row.className = "row mt-3";
                     col = document.createElement("div");
                     col.className = "col";
                     p = document.createElement('p');
                     p.className = "btn btn-warning";
+                   p.id ="btn";
+
+
+
 
                     <!-- Get the title of a movie -->
                     p_text = document.createTextNode(mov_list[i][j][0]);
                     p.appendChild(p_text);
+
+
+
                     ul = document.createElement('ul');
                     li1 = document.createElement('li');
                     li2 = document.createElement('li');
@@ -91,10 +105,25 @@
                     row.appendChild(col);
                     op.appendChild(row);
                 }
+                countmovies();
+
             }
+
         }
 
     }
+    function countmovies(){
+
+      var btn = document.getElementById("btn");
+           const display = document.getElementById("display");
+           btn.onclick = function () {
+                count++;
+            display.innerHTML = count;
+           }
+
+
+    }
+
 
     </script>
 {% endblock %}
